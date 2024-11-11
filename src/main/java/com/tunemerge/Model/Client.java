@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+
+import java.util.List;
+
 @Getter
 @Setter
 public class Client {
@@ -17,4 +20,5 @@ public class Client {
     private String email;
     private AmazonToken amazonToken;
     private SpotifyToken spotifyToken;
+    private List<String> roles;
 }

@@ -18,24 +18,27 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig{
         @Autowired
         private UserDetailServiceImpl userDetailService;
-    @Bean
+   @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-
-        return http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/home/**", "/Spotify/**,Amazon").authenticated()
-                        .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable).build();
-    }
+//    return http.authorizeHttpRequests(request -> request
+//                    .requestMatchers("/home/login", "/home/register").permitAll() // Public access to login and register
+//                    .requestMatchers("/Spotify/**", "/Amazon/**").authenticated() // Secured access
+//                    .anyRequest().authenticated()) // All other requests need authentication
+//            .formLogin(Customizer.withDefaults())
+//            .csrf(AbstractHttpConfigurer::disable)
+//            .build();
+       return http
+               .authorizeHttpRequests(auth-> auth
+                       .anyRequest().permitAll()).csrf(AbstractHttpConfigurer::disable).build();
+        }
 
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -22,5 +22,11 @@ public class SpotifyController {
         else return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/getplaylist")
+    public ResponseEntity<?> getplaylist() {
+        return ResponseEntity.ok().build();
+    }
+
+
 }
 

@@ -28,6 +28,9 @@ public class AuthenticationService {
         public static String getAmazonAuthURL() {
             return AmazonOAuth.getAmazonAuthURL();
         }
+        public static AmazonToken getAmazonAccessToken(String code) {
+            return new AmazonOAuth().getAccessTokenAmazon(code);
+        }
 
 }
 
