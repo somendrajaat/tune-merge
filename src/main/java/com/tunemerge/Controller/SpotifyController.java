@@ -18,30 +18,50 @@ public class SpotifyController {
     @Autowired
     SpotifyService spotifyService;
 
+
+
     public ResponseEntity<?> login( String username) {
         return ResponseEntity.ok(new RedirectView(AuthenticationService.getSpotifyAuthURL(username)));
     }
 
+
     @GetMapping("/grantSpotify")
     public ResponseEntity<?> token(@RequestParam("code") String code,@RequestParam("state") String username) {
         Client client = userService.getUser(username);
+
         if(!userService.checkUser(username)){
+
             return ResponseEntity.badRequest().body("User not found");
+
         }
         if (client.getSpotifyToken() == null) {
+
             SpotifyToken spotifyToken = AuthenticationService.getSpotifyAccessToken(code);
+
             if (spotifyToken != null) {
+
                 client.setSpotifyToken(spotifyToken);
+
                 userService.updateUser(client);
+
                 return ResponseEntity.ok(spotifyService.getPlaylists(username));
+
             } else return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().build();
     }
 
+
+
+
     public ResponseEntity<?> getplaylist(String username) {
         return ResponseEntity.ok(spotifyService.getPlaylists(username));
     }
+
+
+
+
+
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@RequestParam String username) {
         Client client = userService.getUser(username);
