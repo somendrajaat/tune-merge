@@ -21,7 +21,9 @@ public class UserService {
             Client newClient = new Client();
             newClient.setEmail(email);
             newClient.setPassword(password);
-            newClient.setUsername("somendra");
+            newClient.setUsername(username);
+            newClient.setSpotifyToken(null);
+            newClient.setAmazonToken(null);
             newClient.setRoles(new ArrayList<>());
             userRepository.save(newClient);
             return true;
@@ -44,11 +46,28 @@ public class UserService {
         return false;
     }
 
+    public boolean checkUser(String username) {
+        return userRepository.findByUsername(username)!=null;
+    }
+
     public Client getUser(String username) {
+
         return userRepository.findByUsername(username);
     }
 
     public Object getAll() {
         return userRepository.findAll();
+    }
+
+    public void updateUser(Client client) {
+        userRepository.save(client);
+    }
+
+    public boolean deleteUser(String username) {
+        Client client=userRepository.findByUsername(username);
+        if(client!=null){
+            userRepository.delete(client);
+            return true;
+        }else return false;
     }
 }

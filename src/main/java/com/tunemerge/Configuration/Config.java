@@ -1,9 +1,7 @@
 package com.tunemerge.Configuration;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class Config {
     private static final Dotenv dotenv = Dotenv.configure().load();
@@ -24,4 +22,5 @@ public class Config {
     public static String getSpotifyClientSecret() {
         return dotenv.get("SPOTIFY_CLIENT_SECRET");
     }
+
 }

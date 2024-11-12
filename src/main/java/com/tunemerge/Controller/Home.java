@@ -5,6 +5,7 @@ import com.tunemerge.Model.Client;
 import com.tunemerge.Service.SpotifyService;
 import com.tunemerge.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ public class Home {
 
     @GetMapping("/login")
     public ResponseEntity<?>  login(@RequestBody userLogin user) {
+
         if(userService.checkUser(user.getUsername(),user.getPassword()))
              return ResponseEntity.ok().build();
         else return ResponseEntity.badRequest().body("Invalid username or password");
@@ -37,17 +39,29 @@ public class Home {
     public ResponseEntity<?> all() {
         return ResponseEntity.ok(userService.getAll());
     }
-    @GetMapping("/spotify")
+    @GetMapping(value = "/spotify")
     public ResponseEntity<?> spotify(@RequestParam String username) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        String username=authentication.getName();
+
         Client client = userService.getUser(username);
-        if(client.getSpotifyToken()==null){
-            return spotifyController.login();
-        }else {
-               return spotifyController.getplaylist();
-        }
+        if(client==null || client.getSpotifyToken()==null){
+            return spotifyController.login(username);
+        }else return spotifyController.getplaylist(username);
     }
+
+    @GetMapping()
+    public String test(){
+        return "Hello";
+    }
+
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<?> deleteUser(@RequestParam String username){
+        if( userService.deleteUser(username) ){
+            return ResponseEntity.ok().build();
+        }else return ResponseEntity.badRequest().body("User not found");
+    }
+
 
 
 
